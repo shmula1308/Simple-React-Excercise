@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import styles from "./App.module.css";
+import Card from "./components/UI/Card";
+import AddUserForm from "./components/AddUserForm/AddUserForm";
+import NewUserList from "./components/NewUser/NewUserList";
+import ModalAlert from "./components/ModalAlert/ModalAlert";
 
-function App() {
+const App = () => {
+  const [users, setUsers] = useState([]);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const onNewUserHandler = (newUser) => {
+    setUsers((prevUsers) => {
+      const previousUsers = [...prevUsers];
+      previousUsers.unshift(newUser);
+      return previousUsers;
+    });
+  };
+
+  const invalidInputHandler = (errorMsg) => {
+    setErrorMsg(errorMsg);
+  };
+
+  const onModalClickHandler = (ev) => {
+    if (ev.target.closest("button") || ev.target.id === "modal") {
+      setErrorMsg("");
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.app}>
+      <Card>
+        <AddUserForm
+          onNewUserEntered={onNewUserHandler}
+          onInvalidInput={invalidInputHandler}
+        />
+      </Card>
+      <NewUserList items={users} />
+      <ModalAlert onModalClick={onModalClickHandler}>{errorMsg}</ModalAlert>
     </div>
   );
-}
+};
 
 export default App;
