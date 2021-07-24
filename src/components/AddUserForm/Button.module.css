@@ -1,4 +1,5 @@
 .button {
+  display: block;
   font-family: inherit;
   border: none;
   background-color: #4b0b55;
